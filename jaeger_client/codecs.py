@@ -65,7 +65,7 @@ class TextCodec(Codec):
             parent_id=span_context.parent_id, flags=span_context.flags)
         baggage = span_context.baggage
         if baggage:
-            for key, value in six.iteritems(baggage):
+            for key, value in baggage.items():
                 if self.url_encoding:
                     encoded_value = urllib.parse.quote(value)
                 else:
@@ -73,12 +73,12 @@ class TextCodec(Codec):
                 carrier['%s%s' % (self.baggage_prefix, key)] = encoded_value
 
     def extract(self, carrier):
-        if not hasattr(carrier, 'iteritems'):
+        if not hasattr(carrier, 'items'):
             raise InvalidCarrierException('carrier not a collection')
         trace_id, span_id, parent_id, flags = None, None, None, None
         baggage = None
         debug_id = None
-        for key, value in six.iteritems(carrier):
+        for key, value in carrier.items():
             uc_key = key.lower()
             if uc_key == self.trace_id_header:
                 if self.url_encoding:
